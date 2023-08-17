@@ -15,14 +15,14 @@ module.exports.getUsersById = (req, res) => {
     User.findById(req.params.userId)
       .then((user) => {
         if (!user) {
-          res.status(404).send({ message: 'Пользователь не найден' });
+          res.status(404).send({ message: 'Переданы некорректные данные при обновлении профиля' });
           return;
         }
         res.send(user);
       })
-      .catch(() => res.status(404).send({ message: 'Пользователь не найден' }));
+      .catch(() => res.status(404).send({ message: 'Пользователь с указанным _id не найден' }));
   } else {
-    res.status(400).send({ message: 'Неверный _id' });
+    res.status(400).send({ message: 'Пользователь с указанным _id не найден' });
   }
 };
 
@@ -50,7 +50,7 @@ module.exports.editUserData = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь не найден' });
+          res.status(404).send({ message: 'Пользователь с указанным _id не найден' });
         }
       });
   } else {
@@ -67,7 +67,7 @@ module.exports.editUserAvatar = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь не найден' });
+          res.status(404).send({ message: 'Пользователь с указанным _id не найден' });
         }
       });
   } else {

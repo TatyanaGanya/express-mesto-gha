@@ -4,7 +4,7 @@ const Card = require('../models/card');
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send({ message: 'Ошибка на сервере' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка на сервере' }));
 };
 
 // addCards,
@@ -29,14 +29,14 @@ module.exports.deleteCards = (req, res) => {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'карточка с указаным id не найдена' });
+          res.status(404).send({ message: 'Переданы некорректные данные при создании карточки' });
           return;
         }
         res.send({ message: 'Карточка удалена' });
       })
-      .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Переданы некорректные данные при создании карточки' }));
   } else {
-    res.status(400).send({ message: 'Неверный _id' });
+    res.status(400).send({ message: 'Переданы некорректные данные при создании карточки' });
   }
 };
 
@@ -46,14 +46,14 @@ module.exports.likeCard = (req, res) => {
     Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'карточка с указаным id не найдена' });
+          res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка' });
           return;
         }
         res.send(card);
       })
-      .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка' }));
   } else {
-    res.status(400).send({ message: 'Неверный _id' });
+    res.status(400).send({ message: 'Передан несуществующий _id карточки' });
   }
 };
 
@@ -63,13 +63,13 @@ module.exports.dislikeCard = (req, res) => {
     Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'карточка с указаным id не найдена' });
+          res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка' });
           return;
         }
         res.send(card);
       })
-      .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Передан несуществующий _id карточки' }));
   } else {
-    res.status(400).send({ message: 'Неверный _id' });
+    res.status(400).send({ message: 'Передан несуществующий _id карточки' });
   }
 };
