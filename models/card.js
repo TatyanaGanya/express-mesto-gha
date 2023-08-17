@@ -12,7 +12,7 @@ const cardSchema = new mongoose.Schema({
     required: [true, 'Поле должно быть заполнено'],
     validate: {
       validator(val) {
-        const urlEdit = /^https?:\/\/([a-z0-9-]([a-z0-9-]|(?<!\.)\.)+?(?<!\.)\.[a-z]{2,10}(:\d{1,5})?$)|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d{1,5})?$)/;
+        const urlEdit = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-/]))?/;
         return urlEdit.test(val);
       },
       message: 'Неверный url',

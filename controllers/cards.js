@@ -32,7 +32,7 @@ module.exports.deleteCards = (req, res) => {
           res.status(404).send({ message: 'карточка с указаным id не найдена' });
           return;
         }
-        res.send({ message: 'Карточка уудалена' });
+        res.send({ message: 'Карточка удалена' });
       })
       .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
   } else {
@@ -43,7 +43,7 @@ module.exports.deleteCards = (req, res) => {
 // likeCard,
 module.exports.likeCard = (req, res) => {
   if (req.params.cardId.length === 24) {
-    Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
+    Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
       .then((card) => {
         if (!card) {
           res.status(404).send({ message: 'карточка с указаным id не найдена' });
@@ -60,11 +60,7 @@ module.exports.likeCard = (req, res) => {
 // dislikeCard,
 module.exports.dislikeCard = (req, res) => {
   if (req.params.cardId.length === 24) {
-    Card.findByIdAndUpdate(
-      req.params.cardId,
-      { $pull: { likes: req.user._id } },
-    )
-
+    Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
       .then((card) => {
         if (!card) {
           res.status(404).send({ message: 'карточка с указаным id не найдена' });
