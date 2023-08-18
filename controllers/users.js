@@ -12,18 +12,17 @@ module.exports.getUsers = (req, res) => {
 // getUsersById,
 module.exports.getUsersById = (req, res) => {
   User.findById(req.params.userId)
+    .orFail(new Error('NoValid'))
     .then((user) => {
-      if (!user) {
-        res.status(404).send({ message: 'Пользователь не найден' });
-        return;
-      }
-      res.send(user);
+      res.status(201).send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.message === 'NoValid') {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      } else if (err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
@@ -52,7 +51,7 @@ module.exports.editUserData = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь не найден' });
+          res.status(500).send({ message: 'Произошла ошибка на сервере' });
         }
       });
   } else {
@@ -69,7 +68,7 @@ module.exports.editUserAvatar = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь не найден' });
+          res.status(500).send({ message: 'Произошла ошибка на сервере' });
         }
       });
   } else {
