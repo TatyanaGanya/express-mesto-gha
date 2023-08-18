@@ -18,8 +18,13 @@ module.exports.getUsersById = (req, res) => {
         return;
       }
       res.send(user);
-    })
-    .catch(() => res.status(400).send({ message: 'Пользователь не найден' }));
+    }).catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: err.message });
+      } else {
+        res.status(404).send({ message: 'Произошла ошибка на сервере' });
+      }
+    });
 };
 
 // addUser,
