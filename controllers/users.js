@@ -5,25 +5,21 @@ const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.send(users))
+    .then((users) => res.status(201).send(users))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка на сервере' }));
 };
 
 // getUsersById,
 module.exports.getUsersById = (req, res) => {
-  if (req.params.userId.length === 24) {
-    User.findById(req.params.userId)
-      .then((user) => {
-        if (!user) {
-          res.status(404).send({ message: 'Переданы некорректные данные при обновлении профиля' });
-          return;
-        }
-        res.send(user);
-      })
-      .catch(() => res.status(404).send({ message: 'Пользователь с указанным _id не найден' }));
-  } else {
-    res.status(400).send({ message: 'Пользователь с указанным _id не найден' });
-  }
+  User.findById(req.params.userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+        return;
+      }
+      res.send(user);
+    })
+    .catch(() => res.status(404).send({ message: 'Пользователь не найден' }));
 };
 
 // addUser,
@@ -50,7 +46,7 @@ module.exports.editUserData = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь с указанным _id не найден' });
+          res.status(404).send({ message: 'Пользователь не найден' });
         }
       });
   } else {
@@ -67,7 +63,7 @@ module.exports.editUserAvatar = (req, res) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
         } else {
-          res.status(404).send({ message: 'Пользователь с указанным _id не найден' });
+          res.status(404).send({ message: 'Пользователь не найден' });
         }
       });
   } else {
