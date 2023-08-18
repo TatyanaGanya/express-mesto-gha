@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(201).send(users))
+    .then((users) => res.status(200).send(users))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка на сервере' }));
 };
 
