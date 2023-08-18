@@ -29,12 +29,12 @@ module.exports.deleteCards = (req, res) => {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'карточка с указаным id не найдена' });
+          res.status(404).send({ message: 'Карточка с указаным id не найдена' });
           return;
         }
         res.send({ message: 'Карточка удалена' });
       })
-      .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Карточка с указаным id не найдена' }));
   } else {
     res.status(400).send({ message: 'Неверный _id' });
   }
@@ -45,12 +45,18 @@ module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'карточка с указаным id не найдена' });
+        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
         return;
       }
       res.send(card);
     })
-    .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: err.message });
+      } else {
+        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
+      }
+    });
 };
 
 // dislikeCard,
@@ -59,12 +65,12 @@ module.exports.dislikeCard = (req, res) => {
     Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'карточка с указаным id не найдена' });
+          res.status(404).send({ message: 'Карточка с указаным id не найдена' });
           return;
         }
         res.send(card);
       })
-      .catch(() => res.status(404).send({ message: 'карточка с указаным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Карточка с указаным id не найдена' }));
   } else {
     res.status(400).send({ message: 'Неверный _id' });
   }
