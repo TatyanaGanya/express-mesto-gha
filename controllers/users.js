@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.status(201).send(users))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка на сервере' }));
 };
 
@@ -18,11 +18,12 @@ module.exports.getUsersById = (req, res) => {
         return;
       }
       res.send(user);
-    }).catch((err) => {
-      if (err.name === 'ValidationError') {
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
       }
     });
 };
