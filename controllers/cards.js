@@ -37,7 +37,7 @@ module.exports.deleteCards = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
@@ -56,7 +56,7 @@ module.exports.likeCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
@@ -75,7 +75,7 @@ module.exports.dislikeCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: 'Карточка с указаным id не найдена' });
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
