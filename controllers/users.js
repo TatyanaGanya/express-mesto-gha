@@ -19,9 +19,9 @@ module.exports.getUsersById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.message === 'NoValid') {
-        next(new BadRequestError(err.message));
+        next(new NotFoundError(err.message));
       } else if (err.name === 'CastError') {
-        next(new NotFoundError('Пользователь не найден'));
+        next(new BadRequestError('Пользователь не найден'));
       } else {
         next(err);
       }
