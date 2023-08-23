@@ -65,7 +65,7 @@ module.exports.likeCard = (req, res, next) => {
 
 // dislikeCard,
 module.exports.dislikeCard = (req, res, next) => {
-  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: 'true', runValidators: true })
     .then((card) => {
       if (!card) {
         next(new NotFoundError('Пользователь не найден'));
