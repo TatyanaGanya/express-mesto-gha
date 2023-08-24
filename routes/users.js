@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');// celebrate
 const urlEdit = require('../utils/constant');
-const { login, addUser } = require('../controllers/users');
 
 const {
   getUsers,
@@ -10,23 +9,6 @@ const {
   editUserAvatar,
   getUsersMe,
 } = require('../controllers/users');
-
-router.post('/', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(urlEdit),
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }).unknown(true),
-}), addUser);
-
-router.post('/', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }),
-}), login);
 
 router.get('/', getUsers);
 router.get('/me', getUsersMe);
