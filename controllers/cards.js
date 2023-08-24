@@ -47,7 +47,7 @@ module.exports.deleteCards = (req, res, next) => {
         });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'TypeError') {
         next(new NotFoundError(err.message));
       } else {
         next(err);
