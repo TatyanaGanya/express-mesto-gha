@@ -46,7 +46,13 @@ module.exports.deleteCards = (req, res, next) => {
           }
         });
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new NotFoundError(err.message));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // likeCard,
