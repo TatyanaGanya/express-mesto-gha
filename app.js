@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const errorHandler = require('./middlewares/error-handler');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mongodb' } = process.env;
 const app = express();
@@ -19,23 +21,12 @@ mongoose.connect(DB_URL, {
 
 app.use('/', require('./routes/index'));
 
-app.use('*', (req, res) => {
-  res.status(404).send({ message: 'страница не найдена' });
+app.use('*', (req, res, next) => {
+  next(new NotFoundError({ message: 'страница не найдена' }));
 });
 
 // обработчики ошибок
 app.use(errors());
-
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    // проверяем статус и выставляем сообщение в зависимости от него
-    message: statusCode === 500
-      ? 'На сервере произошла ошибка'
-      : message,
-  });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT);
